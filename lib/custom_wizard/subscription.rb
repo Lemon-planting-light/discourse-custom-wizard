@@ -154,6 +154,7 @@ class CustomWizard::Subscription
   end
 
   def type
+    return :business
     return :none unless subscribed?
     return :business if business?
     return :standard if standard?
@@ -169,7 +170,7 @@ class CustomWizard::Subscription
   end
 
   def business?
-    product_slug === "business"
+    true
   end
 
   def community?
