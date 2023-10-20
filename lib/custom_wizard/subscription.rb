@@ -158,7 +158,7 @@ class CustomWizard::Subscription
     return :none unless subscribed?
     return :business if business?
     return :standard if standard?
-    return :community if community?
+    :community if community?
   end
 
   def subscribed?

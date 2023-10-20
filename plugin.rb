@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.4.18
+# version: 2.4.29
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Juan Marcos Gutierrez Ramos
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -236,4 +236,14 @@ after_initialize do
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)
+
+  on(:before_create_topic) do |topic_params, user|
+    category = topic_params.category
+    wizard_submission_id = topic_params.custom_fields&.[]('wizard_submission_id')
+    if category&.custom_fields&.[]('create_topic_wizard').present? && wizard_submission_id.blank?
+      raise Discourse::InvalidParameters.new(
+        I18n.t('wizard.error_messages.wizard_replacing_composer')
+      )
+    end
+  end
 end
