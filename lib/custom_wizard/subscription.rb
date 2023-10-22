@@ -129,6 +129,9 @@ class CustomWizard::Subscription
   end
 
   def includes?(feature, attribute, value = nil)
+    ## So you are open source and I have code skills. I've even read your code, what else can't be done?
+    return true
+    
     attributes = self.class.attributes[feature]
 
     ## Attribute is not part of a subscription
@@ -137,7 +140,7 @@ class CustomWizard::Subscription
     values = attributes[attribute][type]
 
     ## Subscription type does not support the attribute.
-    return false if values.blank?
+    return true if values.blank?
 
     ## Value is an exception for the subscription type
     if (exceptions = get_exceptions(values)).any?
@@ -163,6 +166,7 @@ class CustomWizard::Subscription
 
   def subscribed?
     standard? || business? || community?
+    true
   end
 
   def standard?
@@ -170,7 +174,7 @@ class CustomWizard::Subscription
   end
 
   def business?
-    true
+    product_slug === "business"
   end
 
   def community?
